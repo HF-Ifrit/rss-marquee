@@ -37,7 +37,7 @@ export default function Carousel({
         </div>
         <button
           onClick={() => setPaused(!paused)}
-          className="p-2 transition rounded-full hover:bg-gray-800"
+          className="flex p-2 self-end transition rounded-full hover:bg-gray-800"
         >
           {paused ? <ResumeIcon /> : <PauseIcon />}
         </button>
@@ -45,7 +45,7 @@ export default function Carousel({
           autoFill
           pauseOnHover
           play={!paused}
-          className="min-h-[500px] [&_rtm-initial-child-container]:[align-items:stretch] [&_div.rtm-marquee]:[align-items-stretch] [&>*]:[align-items-stretch]"
+          className="min-h-[500px] [&_div.rfm-initial-child-container]:items-stretch! [&_div.rfm-marquee]:items-stretch!"
         >
           {channel.publications.map((item) => (
             <CarouselCard key={item.guid} item={item} />

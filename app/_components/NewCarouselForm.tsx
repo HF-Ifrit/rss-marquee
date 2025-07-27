@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Channel } from "../_interface/rss";
 
 interface NewCarouselFormProps {
@@ -18,7 +18,7 @@ export const NewCarouselForm = ({
     setRssUrl(event.target.value);
   };
 
-  useMemo(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       setDebouncedRssUrl(rssUrl);
     }, 500);
@@ -61,7 +61,7 @@ export const NewCarouselForm = ({
       <input
         className="border-b"
         type="text"
-        placeholder="Enter RSS URL"
+        placeholder="Enter RSS URL..."
         onChange={handleChangeUrl}
       />
       {error && (
