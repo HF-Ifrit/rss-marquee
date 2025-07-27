@@ -16,7 +16,7 @@ export default function CarouselCard({ item }: CarouselCardProps) {
             alt={item.title}
             width={200}
             height={150}
-            className="rounded-md"
+            className="rounded-md max-h-[150px]"
           />
         ) : (
           <ImagePlaceholder />

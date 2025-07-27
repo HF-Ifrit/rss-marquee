@@ -37,7 +37,7 @@ export default function Carousel({
           className="mb-5 w-full flex flex-row gap-x-5 items-center"
         >
           <button
-            className="transition-colors hover:text-white text-4xl text-red-500 font-bold hover:cursor-pointer"
+            className="rounded-full px-4 py-2 transition-colors hover:text-white text-3xl text-red-500 font-bold hover:bg-red-800 hover:cursor-pointer"
             onClick={handleRemoveCarousel}
           >
             x
@@ -46,7 +46,10 @@ export default function Carousel({
             <p className="text-3xl font-bold">{channel.title}</p>
             <p className="italic">{channel.description}</p>
           </div>
-          <button className="ml-auto" onClick={handleMinimize}>
+          <button
+            className="ml-auto p-4 transition rounded-full hover:bg-gray-800"
+            onClick={handleMinimize}
+          >
             {minimized ? <MaximizeIcon /> : <MinimizeIcon />}
           </button>
         </div>
@@ -54,7 +57,7 @@ export default function Carousel({
           <>
             <button
               onClick={() => setPaused(!paused)}
-              className="flex p-2 transition rounded-full hover:bg-gray-800"
+              className="flex p-2 mb-2 transition rounded-full hover:bg-gray-800"
             >
               {paused ? <ResumeIcon /> : <PauseIcon />}
             </button>

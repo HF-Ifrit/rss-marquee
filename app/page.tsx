@@ -71,28 +71,38 @@ export default function Home() {
   );
 
   return (
-    <div className="px-5 pt-5 pb-10 flex flex-col gap-y-5">
-      {Array.from(carouselMap.entries()).map((entry) => (
-        <div key={`carousel${entry[0]}`} className="flex justify-center">
-          {entry[1] ? (
-            <Carousel
-              handleRemoveCarousel={() => removeCarousel(entry[0])}
-              channel={entry[1].channel}
-            />
-          ) : (
-            <NewCarouselForm
-              id={Number(entry[0])}
-              handleSuccessfulLink={handleSuccessfulLink}
-            />
-          )}
-        </div>
-      ))}
-      <button
-        className="mt-5 max-w-1/12 text-center bg-blue-500! hover:cursor-pointer hover:bg-blue-700! text-white rounded"
-        onClick={() => addNewCarousel(carouselCounter, undefined)}
+    <div className="flex flex-row pt-5">
+      <div id="sideBar">
+        <button
+          className="p-1 mt-5 justify-self-start mr-auto text-center bg-blue-500! hover:cursor-pointer hover:bg-blue-700! text-white rounded"
+          onClick={() => addNewCarousel(carouselCounter, undefined)}
+        >
+          + New RSS Feed
+        </button>
+      </div>
+      <div
+        id="pageContent"
+        className="items-center w-4/5 px-5 pb-10 flex flex-col gap-y-5"
       >
-        + New RSS Feed
-      </button>
+        {Array.from(carouselMap.entries()).map((entry) => (
+          <div
+            key={`carousel${entry[0]}`}
+            className="w-3/4 flex justify-center"
+          >
+            {entry[1] ? (
+              <Carousel
+                handleRemoveCarousel={() => removeCarousel(entry[0])}
+                channel={entry[1].channel}
+              />
+            ) : (
+              <NewCarouselForm
+                id={Number(entry[0])}
+                handleSuccessfulLink={handleSuccessfulLink}
+              />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
