@@ -3,6 +3,8 @@ import { useState } from "react";
 import Marquee from "react-fast-marquee";
 import { Channel } from "../_interface/rss";
 import CarouselCard from "./CarouselCard";
+import { MaximizeIcon } from "./MaximizeIcon";
+import { MinimizeIcon } from "./MinimizeIcon";
 import { PauseIcon } from "./PauseIcon";
 import { ResumeIcon } from "./ResumeIcon";
 
@@ -16,14 +18,24 @@ export default function Carousel({
   handleRemoveCarousel,
 }: CarouselProps) {
   const [paused, setPaused] = useState<boolean>(false);
+  const [minimized, setMinimized] = useState<boolean>(false);
+
+  const handleMinimize = () => {
+    setMinimized(!minimized);
+  };
 
   return (
     <div
       id="carousel"
-      className="border rounded-md border-foreground h-[850px] w-full p-5 flex flex-col gap-y-5"
+      className={`border rounded-md border-foreground transition ${
+        !minimized ? "h-[850px]" : ""
+      } w-full p-5 flex flex-col gap-y-5`}
     >
       <div className="my-3 bg-background rounded-lg shadow-md">
-        <div id="header" className="mb-5 flex flex-row gap-x-5 items-center">
+        <div
+          id="header"
+          className="mb-5 w-full flex flex-row gap-x-5 items-center"
+        >
           <button
             className="transition-colors hover:text-white text-4xl text-red-500 font-bold hover:cursor-pointer"
             onClick={handleRemoveCarousel}
@@ -34,23 +46,30 @@ export default function Carousel({
             <p className="text-3xl font-bold">{channel.title}</p>
             <p className="italic">{channel.description}</p>
           </div>
+          <button className="ml-auto" onClick={handleMinimize}>
+            {minimized ? <MaximizeIcon /> : <MinimizeIcon />}
+          </button>
         </div>
-        <button
-          onClick={() => setPaused(!paused)}
-          className="flex p-2 self-end transition rounded-full hover:bg-gray-800"
-        >
-          {paused ? <ResumeIcon /> : <PauseIcon />}
-        </button>
-        <Marquee
-          autoFill
-          pauseOnHover
-          play={!paused}
-          className="min-h-[500px] [&_div.rfm-initial-child-container]:items-stretch! [&_div.rfm-marquee]:items-stretch!"
-        >
-          {channel.publications.map((item) => (
-            <CarouselCard key={item.guid} item={item} />
-          ))}
-        </Marquee>
+        {!minimized && (
+          <>
+            <button
+              onClick={() => setPaused(!paused)}
+              className="flex p-2 transition rounded-full hover:bg-gray-800"
+            >
+              {paused ? <ResumeIcon /> : <PauseIcon />}
+            </button>
+            <Marquee
+              autoFill
+              pauseOnHover
+              play={!paused}
+              className="min-h-[500px] [&_div.rfm-initial-child-container]:items-stretch! [&_div.rfm-marquee]:items-stretch!"
+            >
+              {channel.publications.map((item) => (
+                <CarouselCard key={item.guid} item={item} />
+              ))}
+            </Marquee>
+          </>
+        )}
       </div>
     </div>
   );
