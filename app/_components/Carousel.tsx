@@ -3,8 +3,8 @@ import { useState } from "react";
 import Marquee from "react-fast-marquee";
 import { Channel } from "../_interface/rss";
 import CarouselCard from "./CarouselCard";
-import { MaximizeIcon } from "./MaximizeIcon";
-import { MinimizeIcon } from "./MinimizeIcon";
+import { MinimizeIcon } from "./CollapseIcon";
+import { MaximizeIcon } from "./ExpandIcon";
 import { PauseIcon } from "./PauseIcon";
 import { ResumeIcon } from "./ResumeIcon";
 
