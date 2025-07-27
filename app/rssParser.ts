@@ -1,30 +1,44 @@
 import { DOMParser } from "xmldom";
 import { Channel, ChannelImage, Item } from "./_interface/rss";
 
+const HTML_CODE_MAP: Record<string, string> = {
+  "&lt;": "<",
+  "&gt;": ">",
+  "&amp;": "&",
+  "&nbsp;": " ",
+  "&#8216;": "'",
+  "&#8217;": "'",
+  "&#8220;": '"',
+  "&#8221;": '"',
+};
+
 export default class RSSParser {
-  xml: string;
-  contentType: string;
+  readonly xml: string;
+  readonly contentType: string;
 
   constructor(xml: string, contentType: string) {
     this.xml = xml;
     this.contentType = contentType;
   }
 
-  convertDescriptionToText(description: Element | undefined): string {
+  convertDescriptionToText = (description: Element | undefined): string => {
     if (!description) return "";
     let text = description.textContent!;
-    // Convert any &amp; entities to their character equivalents
-    text = text.replace(/&lt;/g, "<");
-    text = text.replace(/&gt;/g, ">");
-    text = text.replace(/&amp;/g, "&");
-    text = text.replace(/&nbsp;/g, " "); // Replace non-breaking spaces with regular spaces
-    text = text.replace(/<[^>]*>/g, ""); // Remove HTML tags
+
+    // Replace HTML entities with their corresponding characters
+    Object.entries(HTML_CODE_MAP).forEach(([key, value]) => {
+      text = text.replace(new RegExp(key, "g"), value);
+    });
+
+    // Remove HTML tags
+    text = text.replace(/<[^>]*>/g, "");
+
     // Remove any line breaks or extra whitespace
     text = text.replace(/\s+/g, " ").trim();
     return text;
-  }
+  };
 
-  extractChannel(channelElement: Element): Channel {
+  extractChannel = (channelElement: Element): Channel => {
     const imageElement = channelElement.getElementsByTagName("image")
       ? channelElement.getElementsByTagName("image")[0]
       : undefined;
@@ -61,9 +75,9 @@ export default class RSSParser {
     }
 
     return channel;
-  }
+  };
 
-  extractItem(itemElement: Element): Item {
+  extractItem = (itemElement: Element): Item => {
     const title = itemElement.getElementsByTagName("title")[0].textContent!;
     // Need to build a regex that captures the paragraph tag portion of the description
     // and then iterate over the text with a regex that aggregates the actual text
@@ -106,8 +120,8 @@ export default class RSSParser {
     } as Item;
 
     return item;
-  }
-  parse() {
+  };
+  parse = () => {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(this.xml, this.contentType);
 
@@ -127,5 +141,5 @@ export default class RSSParser {
 
     channel.publications = publishedItems;
     return channel;
-  }
+  };
 }
