@@ -19,25 +19,30 @@ export default function Carousel({
 }: CarouselProps) {
   const [paused, setPaused] = useState<boolean>(false);
   const [minimized, setMinimized] = useState<boolean>(false);
+  const [refreshEnabled, setRefreshEnabled] = useState<boolean>(false);
 
   const handleMinimize = () => {
     setMinimized(!minimized);
   };
 
+  const handleRefreshClicked = () => {
+    setRefreshEnabled(!refreshEnabled);
+  };
+
   return (
     <div
       id="carousel"
-      className={`border rounded-md border-foreground transition ${
+      className={`border-foreground rounded-xl border transition ${
         !minimized ? "h-[850px]" : ""
-      } w-full p-5 flex flex-col gap-y-5`}
+      } flex w-full flex-col gap-y-5 p-5`}
     >
-      <div className="my-3 bg-background rounded-lg shadow-md">
+      <div className="bg-background my-3 rounded-lg shadow-md">
         <div
           id="header"
-          className="mb-5 w-full flex flex-row gap-x-5 items-center"
+          className="mb-5 flex w-full flex-row items-center gap-x-5"
         >
           <button
-            className="rounded-full px-4 py-2 transition-colors hover:text-white text-3xl text-red-500 font-bold hover:bg-red-800 hover:cursor-pointer"
+            className="rounded-full px-4 py-2 text-3xl font-bold text-red-500 transition-colors hover:cursor-pointer hover:bg-red-800 hover:text-white"
             onClick={handleRemoveCarousel}
           >
             x
@@ -47,7 +52,7 @@ export default function Carousel({
             <p className="italic">{channel.description}</p>
           </div>
           <button
-            className="ml-auto p-4 transition rounded-full hover:bg-gray-800"
+            className="ml-auto rounded-full p-4 transition hover:bg-gray-800"
             onClick={handleMinimize}
           >
             {minimized ? <MaximizeIcon /> : <MinimizeIcon />}
@@ -55,12 +60,19 @@ export default function Carousel({
         </div>
         {!minimized && (
           <>
-            <button
-              onClick={() => setPaused(!paused)}
-              className="flex p-2 mb-2 transition rounded-full hover:bg-gray-800"
-            >
-              {paused ? <ResumeIcon /> : <PauseIcon />}
-            </button>
+            <div className="mb-2 flex flex-row items-center align-middle">
+              <button
+                onClick={() => setPaused(!paused)}
+                className="flex rounded-full p-2 transition hover:bg-gray-800"
+              >
+                {paused ? <ResumeIcon /> : <PauseIcon />}
+              </button>
+              <button
+                className={`${refreshEnabled ? "refreshEnabled" : "refreshDisabled"} h-8 w-8 rounded-full`}
+                onClick={handleRefreshClicked}
+              ></button>
+            </div>
+
             <Marquee
               autoFill
               pauseOnHover
@@ -76,23 +88,4 @@ export default function Carousel({
       </div>
     </div>
   );
-}
-{
-  /* <div className="relative overflow-hidden w-full h-full flex flex-row justify-evenly hover:*:pause">
-        {channel.publications.map((item, i) => (
-          <div
-            key={item.guid}
-            style={{
-              animationDelay: `${
-                (25 / channel.publications.length) *
-                (channel.publications.length - (i + 1)) *
-                -1
-              }s`,
-            }}
-            className={`absolute left-[105%] w-10 h-20 m-5 animate-scroll-card hover:pause`}
-          >
-            <CarouselCard item={item} />
-          </div>
-        ))}
-      </div> */
 }

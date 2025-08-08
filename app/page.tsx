@@ -3,12 +3,14 @@ import { useCallback, useEffect, useState } from "react";
 import Carousel from "./_components/Carousel";
 import { NewCarouselForm } from "./_components/NewCarouselForm";
 import { Channel } from "./_interface/rss";
+import useChannel from "./hooks/useChannel";
 
 type FetchedChannel = {
   fetchedUrl: string;
   channel: Channel;
 };
 export default function Home() {
+  const { data: channel, error } = useChannel("");
   const [carouselCounter, setCarouselCounter] = useState(1);
   const [carouselMap, setCarouselMap] = useState<
     Map<number, FetchedChannel | undefined>
@@ -25,8 +27,8 @@ export default function Home() {
             setCarouselMap(
               (prevMap) =>
                 new Map(
-                  prevMap.set(index + 1, { channel: channel, fetchedUrl: url })
-                )
+                  prevMap.set(index + 1, { channel: channel, fetchedUrl: url }),
+                ),
             );
           })
           .catch((err) => console.error("Failed to fetch channel:", err));
@@ -48,7 +50,7 @@ export default function Home() {
         newMap
           .values()
           .map((channel) => channel?.fetchedUrl)
-          .filter((url) => url !== undefined)
+          .filter((url) => url !== undefined),
       );
       localStorage.setItem("carouselLinks", JSON.stringify(urls));
 
@@ -63,18 +65,18 @@ export default function Home() {
         carouselMap
           .values()
           .map((channel) => channel?.fetchedUrl)
-          .filter((url) => url !== undefined)
+          .filter((url) => url !== undefined),
       );
       localStorage.setItem("carouselLinks", JSON.stringify(urls));
     },
-    [addNewCarousel, carouselMap]
+    [addNewCarousel, carouselMap],
   );
 
   return (
     <div className="flex flex-row pt-5">
       <div id="sideBar">
         <button
-          className="p-1 mt-5 justify-self-start mr-auto text-center bg-blue-500! hover:cursor-pointer hover:bg-blue-700! text-white rounded"
+          className="mt-5 mr-auto justify-self-start rounded bg-blue-500! p-1 text-center text-white hover:cursor-pointer hover:bg-blue-700!"
           onClick={() => addNewCarousel(carouselCounter, undefined)}
         >
           + New RSS Feed
@@ -82,12 +84,12 @@ export default function Home() {
       </div>
       <div
         id="pageContent"
-        className="items-center w-4/5 px-5 pb-10 flex flex-col gap-y-5"
+        className="flex w-4/5 flex-col items-center gap-y-5 px-5 pb-10"
       >
         {Array.from(carouselMap.entries()).map((entry) => (
           <div
             key={`carousel${entry[0]}`}
-            className="w-3/4 flex justify-center"
+            className="flex w-3/4 justify-center"
           >
             {entry[1] ? (
               <Carousel

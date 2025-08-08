@@ -6,11 +6,11 @@
 }
 
 @theme {
-  --animate-scroll-card: slide-left 10s linear infinite;
+  --animate-glow: glow 1.5s ease-in-out infinite alternate;
 
-  @keyframes slide-left {
-    to {
-      left: -10%;
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 5px 3px var(--color-lime-500);
     }
   }
 }
@@ -46,4 +46,11 @@ button {
   &:hover {
     cursor: pointer;
   }
+}
+
+.refreshDisabled {
+  @apply bg-gradient-to-tr from-gray-500 to-gray-800 text-gray-500 hover:bg-green-800 hover:bg-none;
+}
+.refreshEnabled {
+  @apply animate-glow bg-gradient-to-tr from-green-500 via-lime-400 to-green-100;
 }
